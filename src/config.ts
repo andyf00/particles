@@ -13,9 +13,9 @@ export interface Settings {
 export const defaults: Settings = {
   count: 20000,
   gravityX: 0,
-  gravityY: 600,
-  drag: 0.3,
-  bounce: 0.8,
+  gravityY: 0,
+  drag: 0,
+  bounce: 1,
   pointerRadius: 200,
   pointerStrength: 4000,
   pointerSwirl: 0,
