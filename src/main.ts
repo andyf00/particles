@@ -85,6 +85,23 @@ let accumulator = 0 // simulated time we still “owe” the physics (in seconds
 let frames = 0 // frames drawn since last FPS reading
 let fpsTimer = 0 // real time passed since last FPS reading (in seconds)
 
+let paused = false
+
+function reset() {
+  sim.seedAll(width, height)
+  ctx.fillStyle = '#0a0b10'
+  ctx.fillRect(0, 0, width, height) // wipe leftover trails
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    paused = !paused
+    e.preventDefault() // stop Space from scrolling or clicking buttons
+  } else if (e.code === 'KeyR') {
+    reset()
+  }
+})
+
 function frame(now: number) {
   // Real time (in seconds) since the last frame, capped so a background tab can't make us "owe" seconds of simulation when we come back
   const elapsed = Math.min((now - last) / 1000, 0.1)
@@ -107,14 +124,18 @@ function frame(now: number) {
   sim.pointerX = pointer.x
   sim.pointerY = pointer.y
 
-  accumulator += elapsed
-  let steps = 0
-  while (accumulator >= STEP && steps < MAX_STEPS) {
-    sim.step(STEP, width, height)
-    accumulator -= STEP
-    steps++
+  if (paused) {
+    accumulator = 0
+  } else {
+    accumulator += elapsed
+    let steps = 0
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      sim.step(STEP, width, height)
+      accumulator -= STEP
+      steps++
+    }
+    if (steps === MAX_STEPS) accumulator = 0
   }
-  if (steps === MAX_STEPS) accumulator = 0
 
   frames++
   fpsTimer += elapsed
