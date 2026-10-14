@@ -1,8 +1,20 @@
 import { Pane } from 'tweakpane'
 import { settings } from '../config'
+import { presets, applyPreset } from '../presets/presets'
 
 export function initPanel(onCountChange: (count: number) => void) {
   const pane = new Pane({ title: 'Settings' })
+
+  const state = { preset: 'Default'}
+  pane
+    .addBinding(state, 'preset', {
+      options: Object.fromEntries(Object.keys(presets).map((n) => [n, n])),
+    })
+    .on('change', (ev) => {
+      applyPreset(ev.value, settings)
+      onCountChange(settings.count)
+      pane.refresh()
+    })
 
   const count = pane.addBinding(settings, 'count', {
     min: 1000,
@@ -20,6 +32,8 @@ export function initPanel(onCountChange: (count: number) => void) {
   const pointer = pane.addFolder({ title: 'Pointer' })
   pointer.addBinding(settings, 'pointerRadius', { min: 20, max: 600 })
   pointer.addBinding(settings, 'pointerStrength', { min: 0, max: 20000 })
+  pointer.addBinding(settings, 'pointerSwirl', { min: 0, max: 1 })
+  pointer.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
 
   return pane
 }
