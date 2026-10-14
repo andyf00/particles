@@ -81,7 +81,7 @@ export class ParticleSystem {
     const pStrength = this.pointerStrength * dt
     const SOFT = 100 // px²: softening
     const swirl = this.pointerSwirl
-    const radial = 1 - swirl
+    const radial = 1 - Math.abs(swirl)
     const cPull = this.centerPull * dt
     const cSwirl = this.centerSwirl * dt
     const cx = this.centerX
