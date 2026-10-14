@@ -19,6 +19,12 @@ export class ParticleSystem {
   pointerY = 0
   pointerRadius = 200 // px: reach of the force
   pointerStrength = 4000 // px/s² at the cursor; negative = repel
+  pointerSwirl = 0
+
+  // Center force
+  centerPull = 0
+  centerX = 0
+  centerY = 0
 
   constructor(count: number, width: number, height: number) {
     this.count = count
@@ -73,6 +79,11 @@ export class ParticleSystem {
     const pR2 = pR * pR
     const pStrength = this.pointerStrength * dt
     const SOFT = 100 // px²: softening
+    const swirl = this.pointerSwirl
+    const radial = 1 - swirl
+    const cPull = this.centerPull * dt
+    const cx = this.centerX
+    const cy = this.centerY
 
     const minX = this.radius
     const maxX = width - this.radius
@@ -90,9 +101,19 @@ export class ParticleSystem {
           const closeness = 1 - d / pR // 1 at cursor, 0 at edge
           const accel = pStrength * closeness * closeness // smooth falloff
           const invDist = 1 / Math.sqrt(d2 + SOFT) // multplier (1/d) for turning (dx, dy) into ~unit direction (softened)
-          vx[i] += dx * invDist * accel
-          vy[i] += dy * invDist * accel
+          const ux = dx * invDist // direction to cursor
+          const uy = dy * invDist
+          vx[i] += (ux * radial - uy * swirl) * accel
+          vy[i] += (uy * radial + ux * swirl) * accel
         }
+      }
+      if (cPull !== 0) {
+        const cdx = cx - x[i]
+        const cdy = cy - y[i]
+        const cd2 = cdx * cdx + cdy * cdy
+        const cInv = 1 / Math.sqrt(cd2 + SOFT)
+        vx[i] += cdx * cInv * cPull
+        vy[i] += cdy * cInv * cPull
       }
       vx[i] = (vx[i] + gx) * dragFactor
       vy[i] = (vy[i] + gy) * dragFactor
