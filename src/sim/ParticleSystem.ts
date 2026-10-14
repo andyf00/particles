@@ -26,16 +26,37 @@ export class ParticleSystem {
     this.y = new Float32Array(count)
     this.vx = new Float32Array(count)
     this.vy = new Float32Array(count)
-    this.scatter(width, height)
+    this.seedAll(width, height)
   }
 
-  scatter(width: number, height:number) {
-    for(let i = 0; i < this.count; i++) {
-      this.x[i] = Math.random() * width
-      this.y[i] = Math.random() * height
-      this.vx[i] = (Math.random() - 0.5) * 200
-      this.vy[i] = (Math.random() - 0.5) * 200
+  seedAll(width: number, height: number) {
+    for (let i = 0; i < this.count; i++) this.spawn(i, width, height)
+  }
+
+  spawn(i: number, width: number, height:number) {
+    this.x[i] = Math.random() * width
+    this.y[i] = Math.random() * height
+    this.vx[i] = (Math.random() - 0.5) * 200
+    this.vy[i] = (Math.random() - 0.5) * 200
+  }
+
+  setCount(newCount: number, width: number, height: number) {
+    if (newCount === this.count) return
+    const keep = Math.min(this.count, newCount)
+
+    const resize = (old: Float32Array) => {
+      const next = new Float32Array(newCount)
+      next.set(old.subarray(0, keep)) // keep existing particles
+      return next
     }
+    this.x = resize(this.x)
+    this.y = resize(this.y)
+    this.vx = resize(this.vx)
+    this.vy = resize(this.vy)
+
+    const oldCount = this.count
+    this.count = newCount
+    for (let i = oldCount; i < newCount; i++) this.spawn(i, width, height)
   }
 
   step(dt: number, width: number, height: number) {
