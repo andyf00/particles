@@ -1,5 +1,6 @@
-import { ParticleSystem } from './sim/ParticleSystem'
 import './style.css'
+import { ParticleSystem } from './sim/ParticleSystem'
+import { pointer, initPointer } from './input/pointer'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')
@@ -26,7 +27,8 @@ function resize() {
 window.addEventListener('resize', resize)
 resize()
 
-const sim = new ParticleSystem(5000, width, height)
+const sim = new ParticleSystem(20000, width, height)
+initPointer(canvas)
 
 // ---- Rendering ----
 let fps = 0
@@ -39,7 +41,7 @@ function render() {
   ctx.fillStyle = '#7c9cff'
   const {x, y, count} = sim
   for (let i = 0; i < count; i++) {
-    ctx.fillRect(x[i], y[i], 2, 2)
+    ctx.fillRect(x[i] - 1, y[i] - 1, 2, 2)
   }
 
   // Draw text for fps and particle count
@@ -61,6 +63,10 @@ function frame(now: number) {
   // Real time (in seconds) since the last frame, capped so a background tab can't make us "owe" seconds of simulation when we come back
   const elapsed = Math.min((now - last) / 1000, 0.1)
   last = now
+  sim.pointerActive = pointer.active
+  sim.pointerX = pointer.x
+  sim.pointerY = pointer.y
+  sim.pointerStrength = pointer.mode === 'repel' ? -4000 : 4000
 
   accumulator += elapsed
   let steps = 0
