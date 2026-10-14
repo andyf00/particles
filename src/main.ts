@@ -37,17 +37,27 @@ initPanel((count) => sim.setCount(count, width, height))
 // ---- Rendering ----
 let fps = 0
 const hud = document.getElementById('hud') as HTMLDivElement
+
 const MAX_SPEED = 400 // px/s that maps to the "fastest" colour
+const MIN_FADE = 0.1 // smallest background fill we draw
 
 let paletteName = settings.palette
 let colours = buildPalette(paletteName)
 let bucketOf = new Uint8Array(0) // which colour bucket each particle is in
+let fadeAcc = 1 // brightness remaining since the last fade was drawn
 
 function render(elapsed: number) {
-  // Fade previous frame instead of erasing it
-  const keep = Math.pow(settings.trail, elapsed * 60)
-  ctx.fillStyle = `rgba(10, 11, 16, ${1 - keep})`
-  ctx.fillRect(0, 0, width, height)
+  // Fade old frame, but only once the saved-up fade is big enough
+  const decay = Math.pow(settings.trail, elapsed * 60)
+  fadeAcc = Math.min(1, fadeAcc * (Number.isFinite(decay) ? decay : 0))
+  if (fadeAcc <= 1 - MIN_FADE) {
+    ctx.fillStyle = `rgba(4, 5, 8, ${1 - fadeAcc})`
+    ctx.fillRect(0, 0, width, height)
+    fadeAcc = 1
+  }
+
+  console.log(fadeAcc);
+  
 
   // Rebuild colours only when the palette actually changed
   if (settings.palette !== paletteName) {
@@ -89,7 +99,7 @@ let paused = false
 
 function reset() {
   sim.seedAll(width, height)
-  ctx.fillStyle = '#0a0b10'
+  ctx.fillStyle = '#040508'
   ctx.fillRect(0, 0, width, height) // wipe leftover trails
 }
 
@@ -104,7 +114,7 @@ window.addEventListener('keydown', (e) => {
 
 function frame(now: number) {
   // Real time (in seconds) since the last frame, capped so a background tab can't make us "owe" seconds of simulation when we come back
-  const elapsed = Math.min((now - last) / 1000, 0.1)
+  const elapsed = Math.min(Math.max((now - last) / 1000, 0), 0.1)
   last = now
 
   sim.gravityX = settings.gravityX

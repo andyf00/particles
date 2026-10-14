@@ -41,7 +41,7 @@ export function initPanel(onCountChange: (count: number) => void) {
   center.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
 
   const look = pane.addFolder({ title: 'Look' })
-  look.addBinding(settings, 'trail', {min: 0, max: 0.95 })
+  look.addBinding(settings, 'trail', {min: 0, max: 0.9 })
   look.addBinding(settings, 'palette', {
     options: Object.fromEntries(palleteNames.map((n) => [n, n]))
   })
