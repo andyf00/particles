@@ -15,9 +15,9 @@ export const presets: Record<string, Partial<Settings>> = {
     gravityY: 0,
     drag: 0.6,
     bounce: 0.9,
-    pointerStrength: 2500,
+    pointerStrength: 600,
     pointerRadius: 350,
-    pointerSwirl: 0.4,
+    pointerSwirl: 0.45,
   },
 
   Swarm: {
