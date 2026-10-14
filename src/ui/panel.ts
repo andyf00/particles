@@ -29,13 +29,15 @@ export function initPanel(onCountChange: (count: number) => void) {
   physics.addBinding(settings, 'gravityY', { min: -2000, max: 2000 })
   physics.addBinding(settings, 'drag', { min: 0, max: 5 })
   physics.addBinding(settings, 'bounce', { min: 0, max: 1 })
-  physics.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
-  physics.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
 
   const pointer = pane.addFolder({ title: 'Pointer' })
   pointer.addBinding(settings, 'pointerRadius', { min: 20, max: 600 })
   pointer.addBinding(settings, 'pointerStrength', { min: 0, max: 20000 })
   pointer.addBinding(settings, 'pointerSwirl', { min: -1, max: 1 })
+
+  const center = pane.addFolder({ title: 'Center' })
+  center.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
+  center.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
 
   return pane
 }
