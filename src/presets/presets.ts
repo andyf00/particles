@@ -30,3 +30,7 @@ export const presets: Record<string, Partial<Settings>> = {
     centerPull: 250,
   },
 }
+
+export function applyPreset(name: string, target: Settings) {
+  Object.assign(target, defaults, presets[name])
+}
