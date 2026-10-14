@@ -29,6 +29,17 @@ export const presets: Record<string, Partial<Settings>> = {
     pointerSwirl: 0.8,
     centerPull: 250,
   },
+
+  Swirl: {
+    gravityY: 0,
+    drag: 0.5,
+    bounce: 0.6,
+    pointerStrength: 6000,
+    pointerRadius: 300,
+    pointerSwirl: 0.8,
+    centerPull: 450,
+    centerSwirl: 200,
+  },
 }
 
 export function applyPreset(name: string, target: Settings) {

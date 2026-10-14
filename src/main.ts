@@ -74,7 +74,9 @@ function frame(now: number) {
   sim.pointerRadius = settings.pointerRadius
   sim.pointerStrength = pointer.mode === 'repel' ? -settings.pointerStrength : settings.pointerStrength
   sim.pointerSwirl = settings.pointerSwirl
+
   sim.centerPull = settings.centerPull
+  sim.centerSwirl = settings.centerSwirl
   sim.centerX = width / 2
   sim.centerY = height / 2
 

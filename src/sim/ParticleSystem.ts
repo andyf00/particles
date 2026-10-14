@@ -23,6 +23,7 @@ export class ParticleSystem {
 
   // Center force
   centerPull = 0
+  centerSwirl = 0
   centerX = 0
   centerY = 0
 
@@ -82,6 +83,7 @@ export class ParticleSystem {
     const swirl = this.pointerSwirl
     const radial = 1 - swirl
     const cPull = this.centerPull * dt
+    const cSwirl = this.centerSwirl * dt
     const cx = this.centerX
     const cy = this.centerY
 
@@ -103,17 +105,19 @@ export class ParticleSystem {
           const invDist = 1 / Math.sqrt(d2 + SOFT) // multplier (1/d) for turning (dx, dy) into ~unit direction (softened)
           const ux = dx * invDist // direction to cursor
           const uy = dy * invDist
-          vx[i] += (ux * radial - uy * swirl) * accel
+          vx[i] += (ux * radial - uy * swirl) * accel // (-uy, ux) is sideways
           vy[i] += (uy * radial + ux * swirl) * accel
         }
       }
-      if (cPull !== 0) {
+      if (cPull !== 0 || cSwirl !== 0) {
         const cdx = cx - x[i]
         const cdy = cy - y[i]
         const cd2 = cdx * cdx + cdy * cdy
         const cInv = 1 / Math.sqrt(cd2 + SOFT)
-        vx[i] += cdx * cInv * cPull
-        vy[i] += cdy * cInv * cPull
+        const ux = cdx * cInv // direction to center
+        const uy = cdy * cInv
+        vx[i] += ux * cPull - uy * cSwirl
+        vy[i] += uy * cPull + ux * cSwirl
       }
       vx[i] = (vx[i] + gx) * dragFactor
       vy[i] = (vy[i] + gy) * dragFactor
