@@ -73,6 +73,10 @@ function frame(now: number) {
   sim.bounce = settings.bounce
   sim.pointerRadius = settings.pointerRadius
   sim.pointerStrength = pointer.mode === 'repel' ? -settings.pointerStrength : settings.pointerStrength
+  sim.pointerSwirl = settings.pointerSwirl
+  sim.centerPull = settings.centerPull
+  sim.centerX = width / 2
+  sim.centerY = height / 2
 
   sim.pointerActive = pointer.active
   sim.pointerX = pointer.x
