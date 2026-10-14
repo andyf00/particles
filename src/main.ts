@@ -3,6 +3,7 @@ import { ParticleSystem } from './sim/ParticleSystem'
 import { pointer, initPointer } from './input/pointer'
 import { settings } from './config'
 import { initPanel } from './ui/panel'
+import { BUCKETS, buildPalette } from './render/palettes'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')
@@ -36,6 +37,11 @@ initPanel((count) => sim.setCount(count, width, height))
 // ---- Rendering ----
 let fps = 0
 const hud = document.getElementById('hud') as HTMLDivElement
+const MAX_SPEED = 400 // px/s that maps to the "fastest" colour
+
+let paletteName = settings.palette
+let colours = buildPalette(paletteName)
+let bucketOf = new Uint8Array(0) // which colour bucket each particle is in
 
 function render(elapsed: number) {
   // Fade previous frame instead of erasing it
@@ -43,11 +49,30 @@ function render(elapsed: number) {
   ctx.fillStyle = `rgba(10, 11, 16, ${1 - keep})`
   ctx.fillRect(0, 0, width, height)
 
-  // Draw each particle
-  ctx.fillStyle = '#7c9cff'
-  const {x, y, count} = sim
+  // Rebuild colours only when the palette actually changed
+  if (settings.palette !== paletteName) {
+    paletteName = settings.palette
+    colours = buildPalette(paletteName)
+  }
+  
+  const { x, y, vx, vy, count} = sim
+  if (bucketOf.length < count) bucketOf = new Uint8Array(count)
+  
+  // Pass 1: decide each particle's bucket from its speed
+  const scale = (BUCKETS - 1) / MAX_SPEED
   for (let i = 0; i < count; i++) {
-    ctx.fillRect(x[i] - 1, y[i] - 1, 2, 2)
+    const b = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]) * scale
+    bucketOf[i] = b > BUCKETS - 1 ? BUCKETS - 1 : b
+  }
+
+  // Pass 2: one pass and one fill per bucket
+  for (let b = 0; b < BUCKETS; b++) {
+    ctx.fillStyle = colours[b]
+    ctx.beginPath()
+    for (let i = 0; i < count; i++) {
+      if (bucketOf[i] === b) ctx.rect(x[i] - 1, y[i] - 1, 2, 2)
+    }
+    ctx.fill()
   }
 }
 

@@ -10,6 +10,7 @@ export const presets: Record<string, Partial<Settings>> = {
     pointerStrength: 9000,
     pointerRadius: 160,
     trail: 0.6,
+    palette: 'Ice',
   },
 
   Nebula: {
@@ -20,6 +21,7 @@ export const presets: Record<string, Partial<Settings>> = {
     pointerRadius: 350,
     pointerSwirl: 0.45,
     trail: 0.85,
+    palette: 'Aurora',
   },
 
   Swarm: {
@@ -30,6 +32,7 @@ export const presets: Record<string, Partial<Settings>> = {
     pointerRadius: 300,
     pointerSwirl: 0.8,
     centerPull: 250,
+    palette: 'Ember',
   },
 
   Swirl: {

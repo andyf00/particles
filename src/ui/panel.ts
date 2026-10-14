@@ -1,6 +1,7 @@
 import { Pane } from 'tweakpane'
 import { settings } from '../config'
 import { presets, applyPreset } from '../presets/presets'
+import { palleteNames } from '../render/palettes'
 
 export function initPanel(onCountChange: (count: number) => void) {
   const pane = new Pane({ title: 'Settings' })
@@ -41,6 +42,9 @@ export function initPanel(onCountChange: (count: number) => void) {
 
   const look = pane.addFolder({ title: 'Look' })
   look.addBinding(settings, 'trail', {min: 0, max: 0.95 })
+  look.addBinding(settings, 'palette', {
+    options: Object.fromEntries(palleteNames.map((n) => [n, n]))
+  })
 
   return pane
 }

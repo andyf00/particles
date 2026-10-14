@@ -10,6 +10,7 @@ export interface Settings {
   centerPull: number // px/s² toward screen center, 0 = off
   centerSwirl: number
   trail: number
+  palette: string
 }
 
 export const defaults: Settings = {
@@ -24,6 +25,7 @@ export const defaults: Settings = {
   centerPull: 0,
   centerSwirl: 0,
   trail: 0,
+  palette: 'Ice',
 }
 
 // The live, mutable copy. The panel writes to it, the loop reads from it.
