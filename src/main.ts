@@ -1,6 +1,8 @@
 import './style.css'
 import { ParticleSystem } from './sim/ParticleSystem'
 import { pointer, initPointer } from './input/pointer'
+import { settings } from './config'
+import { initPanel } from './ui/panel'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')
@@ -27,8 +29,9 @@ function resize() {
 window.addEventListener('resize', resize)
 resize()
 
-const sim = new ParticleSystem(20000, width, height)
+const sim = new ParticleSystem(settings.count, width, height)
 initPointer(canvas)
+initPanel((count) => sim.setCount(count, width, height))
 
 // ---- Rendering ----
 let fps = 0
