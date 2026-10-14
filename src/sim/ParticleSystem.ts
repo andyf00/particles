@@ -105,8 +105,9 @@ export class ParticleSystem {
           const invDist = 1 / Math.sqrt(d2 + SOFT) // multplier (1/d) for turning (dx, dy) into ~unit direction (softened)
           const ux = dx * invDist // direction to cursor
           const uy = dy * invDist
-          vx[i] += (ux * radial - uy * swirl) * accel // (-uy, ux) is sideways
-          vy[i] += (uy * radial + ux * swirl) * accel
+          const spin = Math.abs(accel)
+          vx[i] += ux * radial * accel - uy * swirl * spin // (-uy, ux) is sideways
+          vy[i] += uy * radial * accel + ux * swirl * spin
         }
       }
       if (cPull !== 0 || cSwirl !== 0) {
