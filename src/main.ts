@@ -66,10 +66,17 @@ function frame(now: number) {
   // Real time (in seconds) since the last frame, capped so a background tab can't make us "owe" seconds of simulation when we come back
   const elapsed = Math.min((now - last) / 1000, 0.1)
   last = now
+
+  sim.gravityX = settings.gravityX
+  sim.gravityY = settings.gravityY
+  sim.drag = settings.drag
+  sim.bounce = settings.bounce
+  sim.pointerRadius = settings.pointerRadius
+  sim.pointerStrength = pointer.mode === 'repel' ? -settings.pointerStrength : settings.pointerStrength
+
   sim.pointerActive = pointer.active
   sim.pointerX = pointer.x
   sim.pointerY = pointer.y
-  sim.pointerStrength = pointer.mode === 'repel' ? -4000 : 4000
 
   accumulator += elapsed
   let steps = 0
