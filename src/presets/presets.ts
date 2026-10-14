@@ -9,6 +9,7 @@ export const presets: Record<string, Partial<Settings>> = {
     bounce: 0.35,
     pointerStrength: 9000,
     pointerRadius: 160,
+    trail: 0.6,
   },
 
   Nebula: {
@@ -18,6 +19,7 @@ export const presets: Record<string, Partial<Settings>> = {
     pointerStrength: 600,
     pointerRadius: 350,
     pointerSwirl: 0.45,
+    trail: 0.85,
   },
 
   Swarm: {
