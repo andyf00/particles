@@ -9,6 +9,7 @@ export interface Settings {
   pointerSwirl: number // 0 = straight pull, 1 = pure sideways spin
   centerPull: number // px/s² toward screen center, 0 = off
   centerSwirl: number
+  trail: number
 }
 
 export const defaults: Settings = {
@@ -22,6 +23,7 @@ export const defaults: Settings = {
   pointerSwirl: 0,
   centerPull: 0,
   centerSwirl: 0,
+  trail: 0,
 }
 
 // The live, mutable copy. The panel writes to it, the loop reads from it.

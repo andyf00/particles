@@ -39,5 +39,8 @@ export function initPanel(onCountChange: (count: number) => void) {
   center.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
   center.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
 
+  const look = pane.addFolder({ title: 'Look' })
+  look.addBinding(settings, 'trail', {min: 0, max: 0.95 })
+
   return pane
 }

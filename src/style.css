@@ -17,3 +17,12 @@ canvas {
   height: 100vh;
   touch-action: none;
 }
+
+#hud {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  font: 12px monospace;
+  color: #8a8fa3;
+  pointer-events: none;
+}

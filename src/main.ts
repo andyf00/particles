@@ -35,9 +35,12 @@ initPanel((count) => sim.setCount(count, width, height))
 
 // ---- Rendering ----
 let fps = 0
+const hud = document.getElementById('hud') as HTMLDivElement
 
-function render() {
-  ctx.fillStyle = '#0a0b10'
+function render(elapsed: number) {
+  // Fade previous frame instead of erasing it
+  const keep = Math.pow(settings.trail, elapsed * 60)
+  ctx.fillStyle = `rgba(10, 11, 16, ${1 - keep})`
   ctx.fillRect(0, 0, width, height)
 
   // Draw each particle
@@ -46,11 +49,6 @@ function render() {
   for (let i = 0; i < count; i++) {
     ctx.fillRect(x[i] - 1, y[i] - 1, 2, 2)
   }
-
-  // Draw text for fps and particle count
-  ctx.fillStyle = '#8a8fa3'
-  ctx.font = '12px monospace'
-  ctx.fillText(`${fps} fps · ${sim.count} particles`, 16, 24)
 }
 
 // ---- Loop: fixed-timestep simulation, one render per frame ----
@@ -97,11 +95,12 @@ function frame(now: number) {
   fpsTimer += elapsed
   if (fpsTimer >= 0.5) {
     fps = Math.round(frames / fpsTimer)
+    hud.textContent = `${fps} fps · ${sim.count} particles`
     frames = 0
     fpsTimer = 0
   }
 
-  render()
+  render(elapsed)
   requestAnimationFrame(frame)
 }
 
