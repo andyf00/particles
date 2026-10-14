@@ -55,10 +55,7 @@ function render(elapsed: number) {
     ctx.fillRect(0, 0, width, height)
     fadeAcc = 1
   }
-
-  console.log(fadeAcc);
   
-
   // Rebuild colours only when the palette actually changed
   if (settings.palette !== paletteName) {
     paletteName = settings.palette

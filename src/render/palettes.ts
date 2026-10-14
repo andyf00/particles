@@ -9,7 +9,7 @@ const stops: Record<string, RGB[]> = {
   Aurora: [[30, 60, 160], [40, 200, 160], [160, 255, 120], [255, 255, 200]],
 }
 
-export const palleteNames = Object.keys(stops)
+export const paletteNames = Object.keys(stops)
 
 // Turns a palette's stops into BUCKETS ready-to-use CSS colour strings
 export function buildPalette(name: string): string[] {
