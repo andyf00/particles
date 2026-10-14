@@ -16,6 +16,12 @@ canvas {
   width: 100vw;
   height: 100vh;
   touch-action: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+canvas.ready {
+  opacity: 1;
 }
 
 #hud {
@@ -25,4 +31,22 @@ canvas {
   font: 12px monospace;
   color: #8a8fa3;
   pointer-events: none;
+}
+
+#hint{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  font: 13px system-ui, sans-serif;
+  color: #8a8fa3;
+  text-align: center;
+  padding: 0 16px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#hint.show {
+  opacity: 1;
 }

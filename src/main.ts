@@ -32,7 +32,7 @@ resize()
 
 const sim = new ParticleSystem(settings.count, width, height)
 initPointer(canvas)
-initPanel((count) => sim.setCount(count, width, height))
+const pane = initPanel((count) => sim.setCount(count, width, height))
 
 // ---- Rendering ----
 let fps = 0
@@ -100,14 +100,28 @@ function reset() {
   ctx.fillRect(0, 0, width, height) // wipe leftover trails
 }
 
+const hint = document.getElementById('hint') as HTMLDivElement
+
+function dismissHint() {
+  hint.classList.remove('show')
+}
+
 window.addEventListener('keydown', (e) => {
+  // Don't hijack keys while the user is typing in a panel field.
+  if (e.target instanceof HTMLInputElement) return
+
+  dismissHint()
   if (e.code === 'Space') {
     paused = !paused
     e.preventDefault() // stop Space from scrolling or clicking buttons
   } else if (e.code === 'KeyR') {
     reset()
+  } else if (e.code === 'KeyH') {
+    pane.hidden = !pane.hidden
   }
 })
+
+window.addEventListener('pointerdown', dismissHint)
 
 function frame(now: number) {
   // Real time (in seconds) since the last frame, capped so a background tab can't make us "owe" seconds of simulation when we come back
@@ -158,3 +172,5 @@ function frame(now: number) {
 }
 
 requestAnimationFrame(frame)
+requestAnimationFrame(() => canvas.classList.add('ready'))
+setTimeout(() => hint.classList.add('show'), 800)

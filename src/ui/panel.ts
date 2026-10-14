@@ -4,7 +4,7 @@ import { presets, applyPreset } from '../presets/presets'
 import { paletteNames } from '../render/palettes'
 
 export function initPanel(onCountChange: (count: number) => void) {
-  const pane = new Pane({ title: 'Settings' })
+  const pane = new Pane({ title: 'Settings', expanded: window.innerWidth > 700 })
 
   const state = { preset: 'Default'}
   pane
