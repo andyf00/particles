@@ -6,13 +6,14 @@ export const pointer = {
   active: false,
   mode: 'attract' as PointerMode,
   clicks: [] as { x: number, y: number }[],
+  forceRepel: false,
 }
 
 export function initPointer(target: HTMLElement) {
   target.addEventListener('pointerdown', (e) => {
     target.setPointerCapture(e.pointerId) // handles when dragging outside window while holding down the button
     pointer.active = true
-    pointer.mode = e.button === 2 || e.shiftKey ? 'repel' : 'attract'
+    pointer.mode = e.button === 2 || e.shiftKey || pointer.forceRepel ? 'repel' : 'attract'
     pointer.x = e.clientX
     pointer.y = e.clientY
     pointer.clicks.push({ x: e.clientX, y: e.clientY })

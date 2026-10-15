@@ -1,7 +1,8 @@
 import { Pane } from 'tweakpane'
-import { settings } from '../config'
+import { settings, maxCount } from '../config'
 import { presets, applyPreset } from '../presets/presets'
 import { paletteNames } from '../render/palettes'
+import { initPointer, pointer } from '../input/pointer'
 
 export function initPanel(onCountChange: (count: number) => void) {
   const pane = new Pane({ title: 'Settings', expanded: window.innerWidth > 700 })
@@ -20,7 +21,7 @@ export function initPanel(onCountChange: (count: number) => void) {
 
   const count = pane.addBinding(settings, 'count', {
     min: 1000,
-    max: 100000,
+    max: maxCount,
     step: 1000,
   })
   count.on('change', (ev) => onCountChange(ev.value))
@@ -33,10 +34,10 @@ export function initPanel(onCountChange: (count: number) => void) {
   physics.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
   physics.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
 
-  const pointer = pane.addFolder({ title: 'Pointer' })
-  pointer.addBinding(settings, 'pointerRadius', { min: 20, max: 600 })
-  pointer.addBinding(settings, 'pointerStrength', { min: 0, max: 20000 })
-  pointer.addBinding(settings, 'pointerSwirl', { min: -1, max: 1 })
+  const pointerUI = pane.addFolder({ title: 'Pointer' })
+  pointerUI.addBinding(settings, 'pointerRadius', { min: 20, max: 600 })
+  pointerUI.addBinding(settings, 'pointerStrength', { min: 0, max: 20000 })
+  pointerUI.addBinding(settings, 'pointerSwirl', { min: -1, max: 1 })
 
   const burst = pane.addFolder({ title: 'Burst' })
   burst.addBinding(settings, 'burstCount', { min: 0, max: 2000, step: 50 })
@@ -47,6 +48,8 @@ export function initPanel(onCountChange: (count: number) => void) {
   look.addBinding(settings, 'palette', {
     options: Object.fromEntries(paletteNames.map((n) => [n, n]))
   })
+
+  pane.addBinding(pointer, 'forceRepel', { label: 'repel (touch)' })
 
   return pane
 }
