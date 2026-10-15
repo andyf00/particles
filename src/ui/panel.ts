@@ -2,7 +2,7 @@ import { Pane } from 'tweakpane'
 import { settings, maxCount } from '../config'
 import { presets, applyPreset } from '../presets/presets'
 import { paletteNames } from '../render/palettes'
-import { initPointer, pointer } from '../input/pointer'
+import { pointer } from '../input/pointer'
 
 export function initPanel(onCountChange: (count: number) => void) {
   const pane = new Pane({ 

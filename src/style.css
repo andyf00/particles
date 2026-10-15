@@ -7,6 +7,7 @@
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background: #040508;
 
@@ -21,6 +22,7 @@ canvas {
   display: block;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   touch-action: none;
   opacity: 0;
   transition: opacity 1.2s ease;
@@ -46,9 +48,10 @@ canvas.ready {
   width: 280px;
   max-width: calc(100vw - 16px);
   max-height: calc(100vh - 16px);
+  max-height: calc(100dvh - 16px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* touch-action: pan-y; */
+  touch-action: pan-y;
 }
 
 #hint{
