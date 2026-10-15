@@ -5,9 +5,13 @@ import { Renderer } from './render/Renderer'
 import { pointer, initPointer } from './input/pointer'
 import { initPanel } from './ui/panel'
 import { Hud } from './ui/hud'
+import { isTouch } from './config'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const hint = document.getElementById('hint') as HTMLDivElement
+if (isTouch) {
+  hint.textContent = 'Touch and hold to attract · use the panel to switch to repel'
+}
 
 const renderer = new Renderer(canvas)
 const hud = new Hud(document.getElementById('hud') as HTMLDivElement)

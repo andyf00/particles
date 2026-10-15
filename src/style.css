@@ -39,6 +39,18 @@ canvas.ready {
   pointer-events: none;
 }
 
+#panel {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 280px;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* touch-action: pan-y; */
+}
+
 #hint{
   position: fixed;
   left: 50%;
@@ -55,4 +67,14 @@ canvas.ready {
 
 #hint.show {
   opacity: 1;
+}
+
+@media (max-width: 700px) {
+  #hud {
+    top: auto;
+    bottom: 8px;
+  }
+  #hint {
+    bottom: 32px;
+  }
 }

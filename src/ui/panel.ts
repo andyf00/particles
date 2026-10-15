@@ -5,7 +5,11 @@ import { paletteNames } from '../render/palettes'
 import { initPointer, pointer } from '../input/pointer'
 
 export function initPanel(onCountChange: (count: number) => void) {
-  const pane = new Pane({ title: 'Settings', expanded: window.innerWidth > 700 })
+  const pane = new Pane({ 
+    title: 'Settings',
+    container: document.getElementById('panel') as HTMLElement,
+    expanded: window.innerWidth > 700 && window.innerHeight > 500,
+  })
 
   const state = { preset: 'Default'}
   pane

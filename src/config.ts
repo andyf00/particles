@@ -32,7 +32,7 @@ export const defaults: Settings = {
   burstSpeed: 700,
 }
 
-const isTouch = window.matchMedia('(pointer: coarse)').matches
+export const isTouch = window.matchMedia('(pointer: coarse)').matches
 
 // The live, mutable copy. The panel writes to it, the loop reads from it.
 export const settings: Settings = { 
