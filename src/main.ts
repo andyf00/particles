@@ -75,6 +75,13 @@ function frame(now: number) {
   const elapsed = Math.min(Math.max((now - last) / 1000, 0), 0.1)
   last = now
 
+  for (const c of pointer.clicks) {
+    if (settings.burstCount > 0) {
+      sim.burst(c.x, c.y, settings.burstCount, settings.burstSpeed)
+    }
+  }
+  pointer.clicks.length = 0 // empties queue
+
   syncSim()
 
   if (paused) {

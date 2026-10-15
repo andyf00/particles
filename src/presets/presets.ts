@@ -45,6 +45,18 @@ export const presets: Record<string, Partial<Settings>> = {
     centerPull: 450,
     centerSwirl: 200,
   },
+
+  Fireworks: {
+    count: 8000,
+    gravityY: 450,
+    drag: 0.5,
+    bounce: 0.5,
+    pointerStrength: 0,
+    trail: 0.88,
+    palette: 'Ember',
+    burstCount: 600,
+    burstSpeed: 700,
+  },
 }
 
 export function applyPreset(name: string, target: Settings) {

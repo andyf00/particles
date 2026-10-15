@@ -11,6 +11,8 @@ export interface Settings {
   centerSwirl: number
   trail: number
   palette: string
+  burstCount: number
+  burstSpeed: number
 }
 
 export const defaults: Settings = {
@@ -26,6 +28,8 @@ export const defaults: Settings = {
   centerSwirl: 0,
   trail: 0,
   palette: 'Ice',
+  burstCount: 0,
+  burstSpeed: 700,
 }
 
 // The live, mutable copy. The panel writes to it, the loop reads from it.

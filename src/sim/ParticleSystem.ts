@@ -1,6 +1,5 @@
 export class ParticleSystem {
   count: number
-
   x: Float32Array
   y: Float32Array
   vx: Float32Array
@@ -26,6 +25,8 @@ export class ParticleSystem {
   centerSwirl = 0
   centerX = 0
   centerY = 0
+
+  private nextBurst = 0
 
   constructor(count: number, width: number, height: number) {
     this.count = count
@@ -64,6 +65,20 @@ export class ParticleSystem {
     const oldCount = this.count
     this.count = newCount
     for (let i = oldCount; i < newCount; i++) this.spawn(i, width, height)
+  }
+
+  burst(cx: number, cy: number, n: number, speed: number) {
+    const { x, y, vx, vy, count } = this
+    for (let k = 0; k < Math.min(n, count); k++) {
+      if (this.nextBurst >= count) this.nextBurst = 0
+      const i = this.nextBurst++
+      const angle = Math.random() * Math.PI * 2
+      const s = speed * (0.5 + 0.5 * Math.random())
+      x[i] = cx
+      y[i] = cy
+      vx[i] = Math.cos(angle) * s
+      vy[i] = Math.sin(angle) * s
+    }
   }
 
   step(dt: number, width: number, height: number) {

@@ -4,7 +4,8 @@ export const pointer = {
   x: 0,
   y: 0,
   active: false,
-  mode: 'attract' as PointerMode
+  mode: 'attract' as PointerMode,
+  clicks: [] as { x: number, y: number }[],
 }
 
 export function initPointer(target: HTMLElement) {
@@ -14,6 +15,7 @@ export function initPointer(target: HTMLElement) {
     pointer.mode = e.button === 2 || e.shiftKey ? 'repel' : 'attract'
     pointer.x = e.clientX
     pointer.y = e.clientY
+    pointer.clicks.push({ x: e.clientX, y: e.clientY })
   })
 
   target.addEventListener('pointermove', (e) => {
