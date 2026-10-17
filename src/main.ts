@@ -61,14 +61,17 @@ function dismissHint() {
 window.addEventListener('keydown', (e) => {
   // Don't hijack keys while the user is typing in a panel field.
   if (e.target instanceof HTMLInputElement) return
+
   dismissHint()
   if (e.code === 'Space') {
     paused = !paused
     e.preventDefault() // stop Space from scrolling or clicking buttons
   } else if (e.code === 'KeyR') {
     reset()
+    e.preventDefault()
   } else if (e.code === 'KeyH') {
     pane.hidden = !pane.hidden
+    e.preventDefault()
   }
 })
 window.addEventListener('pointerdown', dismissHint)

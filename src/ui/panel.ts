@@ -43,6 +43,7 @@ export function initPanel(
     onCountChange(settings.count)
     pane.refresh()
     applying = false
+    ;(document.activeElement as HTMLElement | null)?.blur()
   })
 
   pane.on('change', (ev) => {
