@@ -3,6 +3,7 @@ import { settings, spec, type NumericKey, type NumberSpec } from '../config'
 import { presets, applyPreset } from '../presets/presets'
 import { paletteNames } from '../render/palettes'
 import { pointer } from '../input/pointer'
+import { buildShareUrl } from '../presets/share'
 
 const folders: Record<string, NumericKey[]> = {
   Physics: ['gravityX', 'gravityY', 'drag', 'bounce', 'centerPull', 'centerSwirl'],
@@ -66,6 +67,17 @@ export function initPanel(
   })
 
   pane.addBinding(pointer, 'forceRepel', { label: 'repel (touch)' })
+
+  // ---- Share ----
+  pane.addButton({ title: 'Copy share link' }).on('click', async () => {
+    const url = buildShareUrl(settings)
+    history.replaceState(null, '', url)
+    try {
+      await navigator.clipboard.writeText(url)
+    } catch {
+      // Clipboard can be blocked; the URL is still in the address bar.
+    }
+  })
 
   return pane
 }

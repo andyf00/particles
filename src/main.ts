@@ -6,19 +6,25 @@ import { pointer, initPointer } from './input/pointer'
 import { initPanel } from './ui/panel'
 import { Hud } from './ui/hud'
 import { isTouch } from './config'
+import { readShared } from './presets/share'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const hint = document.getElementById('hint') as HTMLDivElement
 if (isTouch) {
   hint.textContent = 'Touch and hold to attract · use the panel to switch to repel'
 }
+const shared = readShared()
+if (shared) Object.assign(settings, shared)
 
 const renderer = new Renderer(canvas)
 const hud = new Hud(document.getElementById('hud') as HTMLDivElement)
 const sim = new ParticleSystem(settings.count, renderer.width, renderer.height)
 
 initPointer(canvas)
-const pane = initPanel((count) => sim.setCount(count, renderer.width, renderer.height))
+const pane = initPanel(
+  (count) => sim.setCount(count, renderer.width, renderer.height),
+  shared && Object.keys(shared).length > 0 ? 'Custom' : 'Default'
+)
 
 // ---- Copy settings and input into the simulation ----
 function syncSim() {

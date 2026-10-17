@@ -11,7 +11,7 @@ export interface NumberSpec {
 export const spec = {
   count: { default: 20000, min: 1000, max: maxCount, step: 1000 },
   gravityX: { default: 0, min: -2000, max: 2000 },
-  gravityY: { default: 600, min: -2000, max: 2000 },
+  gravityY: { default: 0, min: -2000, max: 2000 },
   drag: { default: 0.2, min: 0, max: 5 },
   bounce: { default: 0.8, min: 0, max: 1 },
   pointerRadius: { default: 200, min: 20, max: 600 },
