@@ -2,12 +2,15 @@ import { defaults, spec, clampValue, type NumericKey, type Settings } from '../c
 import { paletteNames } from '../render/palettes'
 
 const numericKeys = Object.keys(spec) as NumericKey[]
+const round = (v: number) => Math.round(v * 100) / 100
 
 // Settings -> short string. Only values that differ from the defaults are stored.
 export function encodeSettings(s: Settings): string {
   const diff: Record<string, number | string> = {}
   for (const key of Object.keys(defaults) as (keyof Settings)[]) {
-    if (s[key] !== defaults[key]) diff[key] = s[key]
+    const raw = s[key]
+    const value = typeof raw === 'number' ? round(raw) : raw
+    if (value !== defaults[key]) diff[key] = value
   }
   const b64 = btoa(JSON.stringify(diff))
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
