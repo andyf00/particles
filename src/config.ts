@@ -20,6 +20,7 @@ export const spec = {
   centerPull: { default: 0, min: 0, max: 1000 },
   centerSwirl: { default: 0, min: -1000, max: 1000 },
   trail: { default: 0, min: 0, max: 0.9 },
+  colourSpeed: { default: 400, min: 100, max: 2000, step: 10 },
   burstCount: { default: 0, min: 0, max: 2000, step: 50 },
   burstSpeed: { default: 700, min: 100, max: 2000 },
 } satisfies Record<string, NumberSpec>

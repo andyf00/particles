@@ -9,7 +9,7 @@ const folders: Record<string, NumericKey[]> = {
   Physics: ['gravityX', 'gravityY', 'drag', 'bounce', 'centerPull', 'centerSwirl'],
   Pointer: ['pointerStrength', 'pointerRadius', 'pointerSwirl'],
   Burst: ['burstCount', 'burstSpeed'],
-  Look: ['trail'],
+  Look: ['trail', 'colourSpeed'],
 }
 
 export function initPanel(

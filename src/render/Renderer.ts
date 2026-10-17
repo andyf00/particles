@@ -3,7 +3,6 @@ import type { ParticleSystem } from "../sim/ParticleSystem"
 import { BUCKETS, buildPalette } from "./palettes"
 
 const BG_RGB = '4, 5, 8' // must match the background in style.css
-const MAX_SPEED = 400 // px/s that maps to the "fastest" colour
 const MIN_FADE = 0.1 // smallest background fill we draw
 
 export class Renderer {
@@ -70,7 +69,7 @@ export class Renderer {
     const bucketOf = this.bucketOf
 
     // Pass 1: decide each particle's bucket from its speed
-    const scale = (BUCKETS - 1) / MAX_SPEED
+    const scale = (BUCKETS - 1) / settings.colourSpeed
     for (let i = 0; i < count; i++) {
       const b = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]) * scale
       bucketOf[i] = b > BUCKETS - 1 ? BUCKETS - 1 : b
