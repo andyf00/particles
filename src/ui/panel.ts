@@ -1,55 +1,67 @@
-import { Pane } from 'tweakpane'
-import { settings, maxCount } from '../config'
+import { FolderApi, Pane } from 'tweakpane'
+import { settings, spec, type NumericKey, type NumberSpec } from '../config'
 import { presets, applyPreset } from '../presets/presets'
 import { paletteNames } from '../render/palettes'
 import { pointer } from '../input/pointer'
 
-export function initPanel(onCountChange: (count: number) => void) {
+const folders: Record<string, NumericKey[]> = {
+  Physics: ['gravityX', 'gravityY', 'drag', 'bounce', 'centerPull', 'centerSwirl'],
+  Pointer: ['pointerStrength', 'pointerRadius', 'pointerSwirl'],
+  Burst: ['burstCount', 'burstSpeed'],
+  Look: ['trail'],
+}
+
+export function initPanel(
+  onCountChange: (count: number) => void,
+  initialPreset = 'Default',
+) {
   const pane = new Pane({ 
     title: 'Settings',
     container: document.getElementById('panel') as HTMLElement,
     expanded: window.innerWidth > 700 && window.innerHeight > 500,
   })
 
-  const state = { preset: 'Default'}
-  pane
-    .addBinding(state, 'preset', {
-      // get all preset names and convert them into dropdown options
-      options: Object.fromEntries(Object.keys(presets).map((n) => [n, n])),
-    })
-    .on('change', (ev) => {
-      applyPreset(ev.value, settings)
-      onCountChange(settings.count)
-      pane.refresh()
-    })
+  // One slider, range read from spec table
+  const bind = (parent: FolderApi, key: NumericKey) => {
+    const { min, max, step } = spec[key] as NumberSpec
+    return parent.addBinding(settings, key, step ? { min, max, step } : { min, max })
+  }
 
-  const count = pane.addBinding(settings, 'count', {
-    min: 1000,
-    max: maxCount,
-    step: 1000,
+  // ---- Preset dropdown ----
+  const state = { preset: initialPreset }
+  const names = [...Object.keys(presets), 'Custom']
+  const presetBinding = pane.addBinding(state, 'preset', {
+    options: Object.fromEntries(names.map((n) => [n, n]))
   })
-  count.on('change', (ev) => onCountChange(ev.value))
 
-  const physics = pane.addFolder({ title: 'Physics' })
-  physics.addBinding(settings, 'gravityX', { min: -2000, max: 2000 })
-  physics.addBinding(settings, 'gravityY', { min: -2000, max: 2000 })
-  physics.addBinding(settings, 'drag', { min: 0, max: 5 })
-  physics.addBinding(settings, 'bounce', { min: 0, max: 1 })
-  physics.addBinding(settings, 'centerPull', { min: 0, max: 1000 })
-  physics.addBinding(settings, 'centerSwirl', { min: -1000, max: 1000 })
+  let applying = false
+  presetBinding.on('change', (ev) => {
+    if (ev.value === 'Custom') return
+    applying = true
+    applyPreset(ev.value, settings)
+    onCountChange(settings.count)
+    pane.refresh()
+    applying = false
+  })
 
-  const pointerUI = pane.addFolder({ title: 'Pointer' })
-  pointerUI.addBinding(settings, 'pointerRadius', { min: 20, max: 600 })
-  pointerUI.addBinding(settings, 'pointerStrength', { min: 0, max: 20000 })
-  pointerUI.addBinding(settings, 'pointerSwirl', { min: -1, max: 1 })
+  pane.on('change', (ev) => {
+    if (applying || ev.target === presetBinding) return
+    if (state.preset !== 'Custom') {
+      state.preset = 'Custom'
+      presetBinding.refresh()
+    }
+  })
 
-  const burst = pane.addFolder({ title: 'Burst' })
-  burst.addBinding(settings, 'burstCount', { min: 0, max: 2000, step: 50 })
-  burst.addBinding(settings, 'burstSpeed', { min: 100, max: 2000 })
+  // ---- Sliders ----
+  bind(pane, 'count').on('change', (ev) => onCountChange(ev.value))
 
-  const look = pane.addFolder({ title: 'Look' })
-  look.addBinding(settings, 'trail', {min: 0, max: 0.9 })
-  look.addBinding(settings, 'palette', {
+  const made: Record<string, FolderApi> = {}
+  for (const [title, keys] of Object.entries(folders)) {
+    made[title] = pane.addFolder({ title })
+    for (const key of keys) bind(made[title], key)
+  }
+
+  made.Look.addBinding(settings, 'palette', {
     options: Object.fromEntries(paletteNames.map((n) => [n, n]))
   })
 

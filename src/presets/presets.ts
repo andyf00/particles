@@ -1,4 +1,4 @@
-import { defaults, maxCount, type Settings } from '../config'
+import { defaults, clampSettings, type Settings } from '../config'
 
 export const presets: Record<string, Partial<Settings>> = {
   Default: {},
@@ -61,5 +61,5 @@ export const presets: Record<string, Partial<Settings>> = {
 
 export function applyPreset(name: string, target: Settings) {
   Object.assign(target, defaults, presets[name])
-  target.count = Math.min(target.count, maxCount)
+  clampSettings(target)
 }
